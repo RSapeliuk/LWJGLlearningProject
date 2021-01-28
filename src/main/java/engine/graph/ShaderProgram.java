@@ -29,6 +29,13 @@ public class ShaderProgram {
         if (shaderId == 0) {
             throw new Exception("Error creating shader. Type: " + shaderType);
         }
+
+        glShaderSource(shaderId, shaderCode);
+        glCompileShader(shaderId);
+
+        if(glGetShaderi(shaderId, GL_COMPILE_STATUS) == 0)
+            throw new Exception("Error compiling Shader code: " + glGetShaderInfoLog(shaderId, 1024));
+
         glAttachShader(programId, shaderId);
 
         return shaderId;
