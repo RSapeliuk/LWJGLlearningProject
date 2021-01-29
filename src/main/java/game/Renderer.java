@@ -5,6 +5,7 @@ import engine.Window;
 import engine.graph.Mesh;
 import engine.graph.ShaderProgram;
 import lombok.NoArgsConstructor;
+import org.joml.Matrix4f;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.FloatBuffer;
@@ -16,20 +17,29 @@ import static org.lwjgl.opengl.GL30.*;
 
 public class Renderer {
 
-    private int vboId;
-
-    private int vaoId;
-
     private ShaderProgram shaderProgram;
+
+    private static final float FOV = (float) Math.toRadians(60.0f);
+
+    private static final float Z_NEAR = 0.01f;
+
+    private static final float Z_FAR = 1000.0f;
+
+    private Matrix4f projectionMatrix;
 
     public Renderer() {
     }
 
-    public void init() throws Exception {
+    public void init(Window window) throws Exception {
         shaderProgram = new ShaderProgram();
         shaderProgram.createVertexShader(Utils.loadResource("/vertex.vs"));
         shaderProgram.createFragmentShader(Utils.loadResource("/fragment.fs"));
         shaderProgram.link();
+
+        //Create projection matrix
+        float aspectRatio = (float) window.getWidth()/window.getHeight();
+        projectionMatrix = new Matrix4f().setPerspective(FOV,aspectRatio,Z_NEAR,Z_FAR);
+        shaderProgram.createUniform("projectionMatrix");
 
     }
 
@@ -41,11 +51,12 @@ public class Renderer {
         clear();
 
         shaderProgram.bind();
+        shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
         //Draw mesh
         glBindVertexArray(mesh.getVaoId());
         glEnableVertexAttribArray(0);
-        glDrawArrays(GL_TRIANGLES, 0, mesh.getVertexCount());
+        glDrawElements(GL_TRIANGLES, mesh.getVertexCount(), GL_UNSIGNED_INT,0);
 
         glDisableVertexAttribArray(0);
         glBindVertexArray(0);

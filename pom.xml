@@ -10,6 +10,7 @@
     <properties>
         <lwjgl.version>3.2.3</lwjgl.version>
         <lwjgl.natives>natives-windows</lwjgl.natives>
+        <joml.version>1.10.0</joml.version>
     </properties>
 
     <dependencyManagement>
@@ -343,7 +344,11 @@
             <artifactId>lwjgl-zstd</artifactId>
             <classifier>${lwjgl.natives}</classifier>
         </dependency>
-
+        <dependency>
+            <groupId>org.joml</groupId>
+            <artifactId>joml</artifactId>
+            <version>${joml.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
