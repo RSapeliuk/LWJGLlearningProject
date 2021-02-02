@@ -47,7 +47,7 @@ public class GameEngine implements Runnable {
         boolean running = true;
         while(running && !window.windowShouldClose()){
             elapsedTime = timer.getElapsedTime();
-            accumulator -= interval;
+            accumulator += elapsedTime;
 
             input();
 
