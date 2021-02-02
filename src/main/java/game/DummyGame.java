@@ -87,15 +87,15 @@ public class DummyGame implements IGameLogic {
             // Front face
             0, 1, 3, 3, 1, 2,
             // Top Face
-            4, 0, 3, 5, 4, 3,
+            8, 10, 11, 9, 8, 11,
             // Right face
-            3, 2, 7, 5, 3, 7,
+            12, 13, 7, 5, 12, 7,
             // Left face
-            6, 1, 0, 6, 0, 4,
+            14, 15, 6, 4, 14, 6,
             // Bottom face
-            2, 1, 6, 2, 6, 7,
+            16, 18, 19, 17, 16, 19,
             // Back face
-            7, 6, 4, 7, 4, 5,
+            4, 6, 7, 5, 4, 7,
         };
 
         float[] textCoords = new float[]{
@@ -134,6 +134,7 @@ public class DummyGame implements IGameLogic {
        GameItem gameItem = new GameItem(mesh);
        gameItem.setPosition(0,0,-2);
        gameItems = new GameItem[]{gameItem};
+
     }
 
     @Override

@@ -44,7 +44,6 @@ public class Renderer {
         shaderProgram.createUniform("worldMatrix");
         shaderProgram.createUniform("texture_sampler");
 
-        window.setClearColor(0.0f,0.0f,0.0f,0.0f);
     }
 
     public void clear() {
@@ -64,6 +63,8 @@ public class Renderer {
         //Update projection Matrix
         Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(),window.getHeight(),Z_NEAR,Z_FAR);
         shaderProgram.setUniform("projectionMatrix", projectionMatrix);
+
+        shaderProgram.setUniform("texture_sampler", 0);
 
         //Render each gameItem
         for (GameItem gameItem : gameItems) {
