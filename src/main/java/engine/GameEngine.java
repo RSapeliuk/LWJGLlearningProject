@@ -1,7 +1,5 @@
 package engine;
 
-import lombok.AllArgsConstructor;
-
 
 public class GameEngine implements Runnable {
 
