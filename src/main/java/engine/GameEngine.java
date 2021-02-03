@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 
 public class GameEngine implements Runnable {
 
-    public static final int TARGET_FPS = 60;
+    public static final int TARGET_FPS = 75;
 
     public static final int TARGET_UPS = 30;
 
@@ -15,10 +15,13 @@ public class GameEngine implements Runnable {
 
     private final IGameLogic gameLogic;
 
+    private final MouseInput mouseInput;
+
     public GameEngine(String windowTitle, int width, int height, boolean vSync, IGameLogic gameLogic) {
         this.window = new Window(windowTitle,width,height,vSync);
         this.timer = new Timer();
         this.gameLogic = gameLogic;
+        this.mouseInput = new MouseInput();
     }
 
     @Override
@@ -37,6 +40,7 @@ public class GameEngine implements Runnable {
         window.init();
         timer.init();
         gameLogic.init(window);
+        mouseInput.init(window);
     }
 
     protected void gameLoop() {
@@ -80,11 +84,12 @@ public class GameEngine implements Runnable {
         }
     }
     protected  void input(){
-        gameLogic.input(window);
+        mouseInput.input(window);
+        gameLogic.input(window, mouseInput);
     }
 
     protected void update(float interval){
-        gameLogic.update(interval);
+        gameLogic.update(interval, mouseInput);
     }
 
     protected  void render(){
