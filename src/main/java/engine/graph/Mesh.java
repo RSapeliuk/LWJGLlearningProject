@@ -1,6 +1,5 @@
 package engine.graph;
 
-import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.FloatBuffer;
@@ -15,17 +14,13 @@ import static org.lwjgl.opengl.GL30.*;
 
 public class Mesh {
 
-  private static final Vector3f DEFAULT_COLOR = new Vector3f(1.0f,1.0f,1.0f);
-
   private final int vaoId;
 
   private final List<Integer> vboIdList;
 
   private final int vertexCount;
 
-  private Texture texture;
-
-  private Vector3f color;
+  private Material material;
 
   public Mesh(float[] positions, float[] textCoords, float[] normals, int[] indices) {
     FloatBuffer posBuffer = null;
@@ -33,7 +28,6 @@ public class Mesh {
     FloatBuffer textCoordsBuffer = null;
     FloatBuffer vecNormalBuffer = null;
     try {
-      color = Mesh.DEFAULT_COLOR;
       vertexCount = indices.length;
       this.vboIdList = new ArrayList<>();
 
@@ -86,10 +80,19 @@ public class Mesh {
         MemoryUtil.memFree(posBuffer);
       if (indicesBuffer != null)
         MemoryUtil.memFree(indicesBuffer);
-      if (textCoordsBuffer != null) {
+      if (textCoordsBuffer != null)
         MemoryUtil.memFree(textCoordsBuffer);
-      }
+      if (vecNormalBuffer != null)
+        MemoryUtil.memFree(vecNormalBuffer);
     }
+  }
+
+  public Material getMaterial() {
+    return material;
+  }
+
+  public void setMaterial(Material material) {
+    this.material = material;
   }
 
   public int getVaoId() {
@@ -110,6 +113,7 @@ public class Mesh {
     }
 
     //Delete the texture
+    Texture texture = material.getTexture();
     if(texture != null)
       texture.cleanUp();
 
@@ -119,6 +123,7 @@ public class Mesh {
   }
 
   public void render(){
+    Texture texture = material.getTexture();
     if(texture != null) {
       glActiveTexture(GL_TEXTURE0);
 
@@ -131,25 +136,6 @@ public class Mesh {
 
     //Restore state
     glBindVertexArray(0);
-  }
-
-  public Texture getTexture() {
-    return texture;
-  }
-
-  public void setTexture(Texture texture) {
-    this.texture = texture;
-  }
-
-  public Vector3f getColor() {
-    return color;
-  }
-
-  public void setColor(Vector3f color) {
-    this.color = color;
-  }
-
-  public boolean isTextured(){
-    return this.texture != null;
+    glBindTexture(GL_TEXTURE_2D,0);
   }
 }
